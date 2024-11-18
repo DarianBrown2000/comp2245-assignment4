@@ -1,5 +1,4 @@
 <?php
-header('Content-Type: application/json');
 $superheroes = [
   [
       "id" => 1,
@@ -63,5 +62,28 @@ $superheroes = [
   ], 
 ];
 
-echo json_encode($superheroes);
+query = filter_input(INPUT_GET, 'query', FILTER_SANITIZE_STRING);
+
+if ($query) {
+    $query = strtolower($query);
+    $found = false;
+
+    foreach ($superheroes as $alias => $info) {
+        if (strtolower($alias) === $query || strtolower($info['name']) === $query) {
+            echo "<h3>{$alias}</h3><h4>{$info['name']}</h4><p>{$info['bio']}</p>";
+            $found = true;
+            break;
+        }
+    }
+
+    if (!$found) {
+        echo "<p>Superhero not found</p>";
+    }
+} else {
+    echo "<ul>";
+    foreach ($superheroes as $alias => $info) {
+        echo "<li>{$alias}</li>";
+    }
+    echo "</ul>";
+}
 ?>

@@ -1,17 +1,20 @@
 document.getElementById('search-btn').addEventListener('click', function () {
-    fetch('superheroes.php')
+    const searchField = document.getElementById('search-field');
+    const query = searchField.value.trim(); // Get and sanitize user input
+    const resultDiv = document.getElementById('result');
+
+    fetch(`superheroes.php?query=${encodeURIComponent(query)}`)
         .then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            return response.text(); // Expecting plain text or HTML
+            return response.text(); // Expecting text (HTML or plain text)
         })
         .then(data => {
-            // Display the superhero list in an alert
-            alert(data);
+            resultDiv.innerHTML = data; // Display the result in the #result div
         })
         .catch(error => {
             console.error('Fetch error:', error);
-            alert('There was a problem fetching the superhero list.');
+            resultDiv.innerHTML = '<p>There was an error fetching the superhero data. Please try again later.</p>';
         });
 });
